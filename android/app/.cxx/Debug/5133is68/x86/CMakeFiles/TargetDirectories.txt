@@ -1,0 +1,2 @@
+C:/FINAL YEAR PROJECT/furry_friend/android/app/.cxx/Debug/5133is68/x86/CMakeFiles/edit_cache.dir
+C:/FINAL YEAR PROJECT/furry_friend/android/app/.cxx/Debug/5133is68/x86/CMakeFiles/rebuild_cache.dir
