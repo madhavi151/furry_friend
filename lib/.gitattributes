@@ -1,5 +1,9 @@
 *.dart linguist-language=Dart
-*.cpp linguist-language=Ignore
-*.cpp linguist-vendored
-*.h linguist-vendored
-
+android/** linguist-vendored
+ios/** linguist-vendored
+build/** linguist-vendored
+linux/** linguist-vendored
+macos/** linguist-vendored
+windows/** linguist-vendored
+.idea/** linguist-vendored
+.dart_tool/** linguist-vendored
