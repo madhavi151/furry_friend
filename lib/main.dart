@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // This is a Dart file
 
+
 import 'Screens/auth-ui/sign-up-screen.dart';
 import 'firebase_options.dart';
 

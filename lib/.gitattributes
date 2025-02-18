@@ -1,0 +1,5 @@
+*.dart linguist-language=Dart
+*.cpp linguist-language=Ignore
+*.cpp linguist-vendored
+*.h linguist-vendored
+
