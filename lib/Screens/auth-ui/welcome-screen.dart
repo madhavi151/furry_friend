@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:furry_friend/Controllers/google-sign-in-controller.dart';
+import 'package:furry_friend/Screens/auth-ui/sign-in-screen.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -93,10 +94,12 @@ class WelcomeScreen extends StatelessWidget {
                 height: Get.height/12,
                  ),
                 label: Text(
-                  "Sign in with Gmail",
+                  "Sign in with Email",
                   style: TextStyle(color: AppConstant.appTextColor),
                   ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => SignInScreen());
+                },
                 ),
             ),
             )   

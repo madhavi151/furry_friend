@@ -1,7 +1,9 @@
 // ignore_for_file: file_names, avoid_unnecessary_containers
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:furry_friend/Controllers/sign-up-controller.dart';
 import 'package:furry_friend/Screens/auth-ui/sign-in-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,13 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignUpScreen> {
+  final SignUpController signUpController =
+  Get.put(SignUpController());
+  TextEditingController username=TextEditingController();
+  TextEditingController userEmail=TextEditingController();
+  TextEditingController userPhone=TextEditingController();
+  TextEditingController userPassword=TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible){
@@ -66,6 +75,7 @@ class _SignInScreenState extends State<SignUpScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
                 child: TextFormField(
+                  controller: userEmail,
                   cursorColor: Color(0xFFC78265),  // Matching cursor color
                   keyboardType: TextInputType.emailAddress,
                   style: TextStyle(color: Color(0xFF2C3E5F), 
@@ -99,6 +109,7 @@ class _SignInScreenState extends State<SignUpScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
                 child: TextFormField(
+                  controller: username,
                   cursorColor: Color(0xFFC78265),  // Matching cursor color
                   keyboardType: TextInputType.name,
                   style: TextStyle(color: Color(0xFF2C3E5F), 
@@ -131,6 +142,7 @@ class _SignInScreenState extends State<SignUpScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
                 child: TextFormField(
+                  controller: userPhone,
                   cursorColor: Color(0xFFC78265),  // Matching cursor color
                   keyboardType: TextInputType.number,
                   style: TextStyle(color: Color(0xFF2C3E5F), 
@@ -164,7 +176,10 @@ class _SignInScreenState extends State<SignUpScreen> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-                child: TextFormField(
+                child: Obx(
+                 () => TextFormField(
+                        controller: userPassword,
+                        obscureText: signUpController.isPasswordVisible.value,
                   cursorColor: Color(0xFFC78265),  // Matching cursor color
                   keyboardType: TextInputType.visiblePassword,
                   style: TextStyle(color: Color(0xFF2C3E5F),
@@ -173,9 +188,18 @@ class _SignInScreenState extends State<SignUpScreen> {
                     hintText: "Password",
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     prefixIcon: Icon(Icons.lock, color: Color(0xFFC78265)),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                              signUpController.isPasswordVisible.toggle();
+                            },
+                      child: signUpController.isPasswordVisible.value
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
+                          ),
                     contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                     border: InputBorder.none,
                   ),
+                ), 
                 ),
               ),
             ),
@@ -185,46 +209,65 @@ class _SignInScreenState extends State<SignUpScreen> {
               height: Get.height / 50,
             ),
             
-            Container(
-              width: Get.width / 2,
-              height: Get.height / 18,
-              decoration: BoxDecoration(
-                color: AppConstant.appSecondaryColor,
-                borderRadius: BorderRadius.circular(30.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(0, 10),
+            Material(
+                  child: Container(
+                    width: Get.width / 2,
+                    height: Get.height / 18,
+                    decoration: BoxDecoration(
+                      color: AppConstant.appSecondaryColor,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: TextButton(
+                      child: Text(
+                        "SIGN UP",
+                        style: TextStyle(color: AppConstant.appTextColor),
+                      ),
+                      onPressed: () async {
+                        
+                        String name = username.text.trim();
+                        String email = userEmail.text.trim();
+                        String phone = userPhone.text.trim();
+                        String password = userPassword.text.trim();
+                        String userDeviceToken = '';
+
+                        if (name.isEmpty ||
+                            email.isEmpty ||
+                            phone.isEmpty ||
+                            password.isEmpty) {
+                          Get.snackbar(
+                            "Error",
+                            "Please enter all details",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: AppConstant.appSecondaryColor,
+                            colorText: AppConstant.appTextColor,
+                          );
+                        } else {
+                          UserCredential? userCredential =
+                              await signUpController.signUpMethod(
+                            name,
+                            email,
+                            phone,
+                            password,
+                            userDeviceToken,
+                          );
+
+                          if (userCredential != null) {
+                            Get.snackbar(
+                              "Verification email sent.",
+                              "Please check your email.",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondaryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+
+                            FirebaseAuth.instance.signOut();
+                            Get.offAll(() => SignInScreen());
+                          }
+                        }
+                      },
+                    ),
                   ),
-                ],
-              ),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  backgroundColor: AppConstant.appSecondaryColor,
                 ),
-                onPressed: () {
-            // Action for sign in
-                },
-                child: Text(
-                  "SIGN UP",
-                  style: TextStyle(
-                    color: AppConstant.appTextColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-              ),
-            ),
-            
-            
-            
             ///SIGN UP AUR USKE NICHE LIKHA HUA KE BECH KE SPACING KE LIYE
               SizedBox(
                     height: Get.height/ 20
