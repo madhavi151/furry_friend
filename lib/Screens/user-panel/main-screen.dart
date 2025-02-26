@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:furry_friend/Screens/auth-ui/welcome-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
@@ -20,9 +21,11 @@ class MainScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           GestureDetector(
-            onTap: (){
+            onTap: () async{
               GoogleSignIn googleSignIn = GoogleSignIn();
-              googleSignIn.signOut();
+              FirebaseAuth _auth =FirebaseAuth.instance;
+              await _auth.signOut();
+              await googleSignIn.signOut();
               Get.offAll(() => WelcomeScreen());
             },
             child: Padding
