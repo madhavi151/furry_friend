@@ -20,7 +20,7 @@ class ForgetPasswordController extends GetxController {
       await _auth.sendPasswordResetEmail(email: userEmail);
       Get.snackbar(
         "Request Sent Sucessfully",
-        "Password reesr link sent to $userEmail",
+        "Password reset link sent to $userEmail",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppConstant.appSecondaryColor,
         colorText: AppConstant.appTextColor,

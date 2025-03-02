@@ -1,9 +1,11 @@
-// ignore_for_file: avoid_unnecessary_containers, file_names
+// ignore_for_file: avoid_unnecessary_containers, file_names, unnecessary_null_comparison
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:furry_friend/Controllers/get-user-data-controller.dart';
 import 'package:furry_friend/Controllers/sign-in-controller.dart';
+import 'package:furry_friend/Screens/admin-panel/admin-main-screen.dart';
 import 'package:furry_friend/Screens/auth-ui/forget-password-screen.dart';
 import 'package:furry_friend/Screens/user-panel/main-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
@@ -22,6 +24,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
 
   final SignInController signInController = Get.put(SignInController());
+  final GetUserDataController getUserDataController = Get.put(GetUserDataController());
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPassword = TextEditingController();
 
@@ -179,8 +182,7 @@ SizedBox(
                     onPressed: () async {
                       String email = userEmail.text.trim();
                       String password = userPassword.text.trim();
-
-                      if (email.isEmpty || password.isEmpty) {
+         if (email.isEmpty || password.isEmpty) {
                         Get.snackbar(
                           "Error",
                           "Please enter all details",
@@ -192,13 +194,31 @@ SizedBox(
                         UserCredential? userCredential = await signInController
                             .signInMethod(email, password);
 
+                        var userData = await getUserDataController
+                            .getUserData(userCredential!.user!.uid);
+
                         if (userCredential != null) {
                           if (userCredential.user!.emailVerified) {
-                          Get.snackbar("Success","Login Successfull",snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: AppConstant.appSecondaryColor,
-        colorText: AppConstant.appTextColor);
-        Get.offAll(() => MainScreen());
-
+                            //
+                            if (userData[0]['isAdmin'] == true) {
+                              Get.snackbar(
+                                "Success Admin Login",
+                                "login Successfully!",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.appSecondaryColor,
+                                colorText: AppConstant.appTextColor,
+                              );
+                              Get.offAll(() => AdminMainScreen());
+                            } else {
+                              Get.offAll(() => MainScreen());
+                              Get.snackbar(
+                                "Success User Login",
+                                "login Successfully!",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.appSecondaryColor,
+                                colorText: AppConstant.appTextColor,
+                              );
+                            }
                           } else {
                             Get.snackbar(
                               "Error",
@@ -221,8 +241,7 @@ SizedBox(
                     },
                   ),
                 ),
-              ),
-///SIGN IN AUR USKE NICHE LIKHA HUA KE BECH KE SPACING KE LIYE
+              ),///SIGN IN AUR USKE NICHE LIKHA HUA KE BECH KE SPACING KE LIYE
 
               SizedBox(
                 height: Get.height / 20,
