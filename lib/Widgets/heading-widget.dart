@@ -27,7 +27,7 @@ class HeadingWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(0.0),
             blurRadius: 5.0,
             spreadRadius: 2.0,
             offset: Offset(0, 2),
@@ -76,7 +76,7 @@ class HeadingWidget extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppConstant.appSecondaryColor.withOpacity(0.3),
+                    color: AppConstant.appSecondaryColor.withOpacity(0.5),
                     blurRadius: 5.0,
                     spreadRadius: 2.0,
                     offset: Offset(0, 3),

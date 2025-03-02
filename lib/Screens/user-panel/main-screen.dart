@@ -4,7 +4,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:furry_friend/Screens/user-panel/all-categories-screen.dart';
+import 'package:furry_friend/Screens/user-panel/all-flash-sale-products.dart';
+import 'package:furry_friend/Screens/user-panel/all-products-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
+import 'package:furry_friend/Widgets/all-products-widgets.dart';
 import 'package:furry_friend/Widgets/banner-widget.dart';
 import 'package:furry_friend/Widgets/category-widget.dart';
 import 'package:furry_friend/Widgets/custom-drawer-widget.dart';
@@ -48,24 +52,40 @@ class MainScreen extends StatelessWidget {
               HeadingWidget(
                 headingTitle: "Categories",
                 headingSubTitle: "According to your pets",
-                onTap: () {},
+                onTap: () => Get.to (() => AllCategoriesScreen()),
                 buttonText: "See More -->",   
               ),
 
               //categories
               CategoriesWidget(),
 
+
               //heading
               
               HeadingWidget(
                 headingTitle: "Flash For Sale",
                 headingSubTitle: "According to your pets",
-                onTap: () {},
+               onTap: () => Get.to (() => AllFlashSaleProductScreen()),
                 buttonText: "See More -->",   
               ),
 
               //flashsale
-              FlashSaleWidget(),
+
+          FlashSaleWidget(),
+
+               //heading
+              
+              HeadingWidget(
+                headingTitle: "Products ",
+                headingSubTitle: "According to your pets",
+                onTap: () => Get.to (() => AllProductsScreen()),
+                buttonText: "See More -->",   
+              ),
+
+              AllProductsWidget(),
+
+             
+
 
             ],
           ),

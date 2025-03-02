@@ -85,7 +85,7 @@ class FlashSaleWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.12), // Soft shadow
+                color: Colors.black.withOpacity(0.3), // Soft shadow
                 blurRadius: 10,
                 offset: Offset(2, 5),
               ),
