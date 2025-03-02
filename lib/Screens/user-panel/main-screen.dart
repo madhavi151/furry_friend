@@ -1,12 +1,14 @@
 // ignore: file_names
 
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, file_names, duplicate_ignore
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:furry_friend/Widgets/banner-widget.dart';
+import 'package:furry_friend/Widgets/category-widget.dart';
 import 'package:furry_friend/Widgets/custom-drawer-widget.dart';
+import 'package:furry_friend/Widgets/flash-sale-widget.dart';
 import 'package:furry_friend/Widgets/heading-widget.dart';
 import 'package:get/get.dart';
 
@@ -48,8 +50,23 @@ class MainScreen extends StatelessWidget {
                 headingSubTitle: "According to your pets",
                 onTap: () {},
                 buttonText: "See More -->",   
-                
               ),
+
+              //categories
+              CategoriesWidget(),
+
+              //heading
+              
+              HeadingWidget(
+                headingTitle: "Flash For Sale",
+                headingSubTitle: "According to your pets",
+                onTap: () {},
+                buttonText: "See More -->",   
+              ),
+
+              //flashsale
+              FlashSaleWidget(),
+
             ],
           ),
         ),
