@@ -1,0 +1,2 @@
+C:/FINAL YEAR PROJECT/furry_friend/android/app/.cxx/RelWithDebInfo/2v6o74l2/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/FINAL YEAR PROJECT/furry_friend/android/app/.cxx/RelWithDebInfo/2v6o74l2/armeabi-v7a/CMakeFiles/rebuild_cache.dir

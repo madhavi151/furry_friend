@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Firebase Firestore for
 import 'package:flutter/cupertino.dart'; // Cupertino widgets
 import 'package:flutter/material.dart'; // Material Design widgets
 import 'package:furry_friend/Models/product-model.dart'; // Importing product model
+import 'package:furry_friend/Screens/user-panel/products-detail-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:get/get.dart'; // GetX for state management and utility functions
 
@@ -81,7 +82,7 @@ class AllProductsScreen extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
                   child: GestureDetector(
-                    onTap: () {}, // Placeholder for tapping functionality
+                    onTap: () => Get.to(() =>ProductsDetailScreen(productModel:productModel)), // Placeholder for tapping functionality
                     child: Container(
                       width: Get.width / 2.2, // Setting width
                       height: Get.height / 5, // Setting height
