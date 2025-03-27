@@ -144,7 +144,7 @@ class AllProductsWidget extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Text(
-                                      "Rs ${productModel.salePrice}", // Sale price
+                                      "Rs ${productModel.fullPrice}", // Sale price
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,

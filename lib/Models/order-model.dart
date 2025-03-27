@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-class ProductModel {
-  final String productid;
+class OrderModel {
+  final String productId;
   final String categoryId;
   final String productName;
   final String categoryName;
@@ -9,13 +9,21 @@ class ProductModel {
   final String fullPrice;
   final List productImages;
   final String deliveryTime;
-  late final bool isSale;
+  final bool isSale;
   final String productDescription;
   final dynamic createdAt;
   final dynamic updatedAt;
+  final int productQuantity;
+  final double productTotalPrice;
+  final String customerId;
+  final bool status;
+  final String customerName;
+  final String customerPhone;
+  final String customerAddress;
+  final String customerDeviceToken;
 
-  ProductModel({
-    required this.productid,
+  OrderModel({
+    required this.productId,
     required this.categoryId,
     required this.productName,
     required this.categoryName,
@@ -27,11 +35,19 @@ class ProductModel {
     required this.productDescription,
     required this.createdAt,
     required this.updatedAt,
+    required this.productQuantity,
+    required this.productTotalPrice,
+    required this.customerId,
+    required this.status,
+    required this.customerName,
+    required this.customerPhone,
+    required this.customerAddress,
+    required this.customerDeviceToken,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'productid': productid,
+      'productId': productId,
       'categoryId': categoryId,
       'productName': productName,
       'categoryName': categoryName,
@@ -43,12 +59,20 @@ class ProductModel {
       'productDescription': productDescription,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'productQuantity': productQuantity,
+      'productTotalPrice': productTotalPrice,
+      'customerId': customerId,
+      'status': status,
+      'customerName': customerName,
+      'customerPhone': customerPhone,
+      'customerAddress': customerAddress,
+      'customerDeviceToken': customerDeviceToken,
     };
   }
 
-  factory ProductModel.fromMap(Map<String, dynamic> json) {
-    return ProductModel(
-      productid: json['productId'],
+  factory OrderModel.fromMap(Map<String, dynamic> json) {
+    return OrderModel(
+      productId: json['productId'],
       categoryId: json['categoryId'],
       productName: json['productName'],
       categoryName: json['categoryName'],
@@ -60,6 +84,14 @@ class ProductModel {
       productDescription: json['productDescription'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
+      productQuantity: json['productQuantity'],
+      productTotalPrice: json['productTotalPrice'],
+      customerId: json['customerId'],
+      status: json['status'],
+      customerName: json['customerName'],
+      customerPhone: json['customerPhone'],
+      customerAddress: json['customerAddress'],
+      customerDeviceToken: json['customerDeviceToken'],
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:furry_friend/Models/product-model.dart';
+import 'package:furry_friend/Screens/user-panel/products-detail-screen.dart';
 import 'package:get/get.dart';
 
 
@@ -75,9 +76,7 @@ class FlashSaleWidget extends StatelessWidget {
     Padding(
       padding: EdgeInsets.all(6.0),
       child: GestureDetector(
-        onTap: () {
-          print("Clicked on ${productModel.productName}");
-        },
+        onTap: () => Get.to(() =>ProductsDetailScreen(productModel:productModel)), // Placeholder for tapping functionality
         child: Container(
           width: Get.width / 3.2,
           height: Get.height / 5.5,

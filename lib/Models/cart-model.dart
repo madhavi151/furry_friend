@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-class ProductModel {
-  final String productid;
+class CartModel {
+  final String productId;
   final String categoryId;
   final String productName;
   final String categoryName;
@@ -9,13 +9,15 @@ class ProductModel {
   final String fullPrice;
   final List productImages;
   final String deliveryTime;
-  late final bool isSale;
+  final bool isSale;
   final String productDescription;
   final dynamic createdAt;
   final dynamic updatedAt;
+  final int productQuantity;
+  final double productTotalPrice;
 
-  ProductModel({
-    required this.productid,
+  CartModel({
+    required this.productId,
     required this.categoryId,
     required this.productName,
     required this.categoryName,
@@ -27,11 +29,13 @@ class ProductModel {
     required this.productDescription,
     required this.createdAt,
     required this.updatedAt,
+    required this.productQuantity,
+    required this.productTotalPrice,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'productid': productid,
+      'productId': productId,
       'categoryId': categoryId,
       'productName': productName,
       'categoryName': categoryName,
@@ -43,12 +47,14 @@ class ProductModel {
       'productDescription': productDescription,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'productQuantity': productQuantity,
+      'productTotalPrice': productTotalPrice,
     };
   }
 
-  factory ProductModel.fromMap(Map<String, dynamic> json) {
-    return ProductModel(
-      productid: json['productId'],
+  factory CartModel.fromMap(Map<String, dynamic> json) {
+    return CartModel(
+      productId: json['productId'],
       categoryId: json['categoryId'],
       productName: json['productName'],
       categoryName: json['categoryName'],
@@ -60,6 +66,8 @@ class ProductModel {
       productDescription: json['productDescription'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
+      productQuantity: json['productQuantity'],
+      productTotalPrice: json['productTotalPrice'],
     );
   }
 }

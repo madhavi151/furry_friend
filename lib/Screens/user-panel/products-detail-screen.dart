@@ -1,12 +1,17 @@
-// ignore_for_file: file_names, must_be_immutable, avoid_unnecessary_containers, prefer_interpolation_to_compose_strings
+// ignore_for_file: file_names, must_be_immutable, avoid_unnecessary_containers, prefer_interpolation_to_compose_strings, dead_code
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:furry_friend/Models/product-model.dart';
+import 'package:furry_friend/Screens/user-panel/cart-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:get/get.dart';
+
+import '../../Models/cart-model.dart';
 
 class ProductsDetailScreen extends StatefulWidget {
   ProductModel productModel;
@@ -19,6 +24,7 @@ class ProductsDetailScreen extends StatefulWidget {
 
 class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
   int _currentIndex = 0;
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +32,23 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
       appBar: AppBar(
         backgroundColor: AppConstant.appMainColor,
         title: Text("Product Details"),
+        actions: [
+           GestureDetector(
+              onTap:  () => Get.to (() => CartScreen()),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.shopping_cart_sharp,),
+              ),
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: Get.height / 60),
-            
-            // Carousel Slider (Remains unchanged as per request)
+
+            // Carousel Slider
             CarouselSlider(
               items: widget.productModel.productImages
                   .map((imageUrl) => _buildProductImage(imageUrl))
@@ -56,7 +71,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
             ),
             SizedBox(height: 10),
             _buildIndicator(),
-            
+
             // Product Details Card
             Padding(
               padding: EdgeInsets.all(12.0),
@@ -72,9 +87,13 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                     children: [
                       _buildDetailRow("Product Name:", widget.productModel.productName, isProductName: true),
                       _buildDetailRow("Category:", widget.productModel.categoryName),
-                      _buildPriceRow("Price:", widget.productModel.fullPrice),
+
+                      widget.productModel.isSale == true && widget.productModel.salePrice.isNotEmpty
+                          ? _buildPriceRow("Sale Price:", widget.productModel.salePrice)
+                          : _buildPriceRow("Full Price:", widget.productModel.fullPrice),
+
                       SizedBox(height: 10),
-                      
+
                       // Full Description Box
                       Text(
                         "Description:",
@@ -97,15 +116,25 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                 ),
               ),
             ),
-            
+
             // Action Buttons
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildActionButton("Add to Cart", Icons.shopping_cart, AppConstant.appSecondaryColor),
-                  _buildActionButton("WhatsApp", Icons.chat_sharp, Colors.green),
+                  _buildActionButton("Add to Cart", Icons.shopping_cart, AppConstant.appSecondaryColor, () async {
+                    if (user != null) {
+                      await checkProductExistence(uId: user!.uid);
+                    } else {
+                      // Handle the case where the user is not logged in (e.g., show a login prompt)
+                      print("User not logged in");
+                    }
+                  }),
+                  _buildActionButton("WhatsApp", Icons.chat_sharp, Colors.green, () {
+                    // Implement WhatsApp functionality here
+                    print("WhatsApp button pressed");
+                  }),
                 ],
               ),
             ),
@@ -181,7 +210,7 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.red,
+              color: title == "Sale Price:" ? Colors.red : Colors.black,
             ),
           ),
         ],
@@ -190,12 +219,12 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
   }
 
   // Helper widget for action buttons
-  Widget _buildActionButton(String text, IconData icon, Color color) {
+  Widget _buildActionButton(String text, IconData icon, Color color, VoidCallback onPressed) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: onPressed,
           icon: Icon(icon, color: Colors.white),
           label: Text(text, style: TextStyle(color: Colors.white)),
           style: ElevatedButton.styleFrom(
@@ -209,4 +238,62 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
       ),
     );
   }
+
+  // checkl prooduct exist or not
+ Future<void> checkProductExistence({
+  required String uId,
+  int quantityIncrement = 1,
+}) async {
+  final DocumentReference documentReference = FirebaseFirestore.instance
+      .collection('cart')
+      .doc(uId)
+      .collection('cartOrders')
+      .doc(widget.productModel.productid.toString());
+
+  DocumentSnapshot snapshot = await documentReference.get();
+if (snapshot.exists) {
+      int currentQuantity = snapshot['productQuantity'];
+      int updatedQuantity = currentQuantity + quantityIncrement;
+      double totalPrice = double.parse(widget.productModel.isSale
+              ? widget.productModel.salePrice
+              : widget.productModel.fullPrice) *
+          updatedQuantity;
+
+      await documentReference.update({
+        'productQuantity': updatedQuantity,
+        'productTotalPrice': totalPrice
+      });
+
+      print("product exists");
+  } else {
+    await FirebaseFirestore.instance.collection('cart').doc(uId).set(
+      {
+        'uId': uId,
+        'createdAt': DateTime.now(),
+      },
+      SetOptions(merge: true), // Prevents overwriting existing data
+    );
+
+    CartModel cartModel = CartModel(
+      productId: widget.productModel.productid,
+      categoryId: widget.productModel.categoryId,
+      productName: widget.productModel.productName,
+      categoryName: widget.productModel.categoryName,
+      salePrice: widget.productModel.salePrice,
+      fullPrice: widget.productModel.fullPrice,
+      productImages: widget.productModel.productImages,
+      deliveryTime: widget.productModel.deliveryTime,
+      isSale: widget.productModel.isSale,
+      productDescription: widget.productModel.productDescription,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      productQuantity: 1,
+        productTotalPrice: double.parse(widget.productModel.isSale
+            ? widget.productModel.salePrice
+            : widget.productModel.fullPrice),
+      );
+    await documentReference.set(cartModel.toMap());
+    print("Product added to cart.");
+  }
+}
 }

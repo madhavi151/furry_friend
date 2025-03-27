@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:furry_friend/Screens/user-panel/all-categories-screen.dart';
 import 'package:furry_friend/Screens/user-panel/all-flash-sale-products.dart';
 import 'package:furry_friend/Screens/user-panel/all-products-screen.dart';
+import 'package:furry_friend/Screens/user-panel/cart-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:furry_friend/Widgets/all-products-widgets.dart';
 import 'package:furry_friend/Widgets/banner-widget.dart';
@@ -35,6 +36,15 @@ class MainScreen extends StatelessWidget {
             style: TextStyle(color: AppConstant.appTextColor),
           ),
           centerTitle: true,
+          actions: [
+            GestureDetector(
+              onTap:  () => Get.to (() => CartScreen()),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.shopping_cart_sharp,),
+              ),
+            ),
+          ],
           
       ),
       drawer: DrawerWidget( ),
