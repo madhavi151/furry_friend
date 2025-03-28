@@ -1,13 +1,16 @@
 // ignore: file_names
 
-// ignore_for_file: avoid_unnecessary_containers, file_names, duplicate_ignore
+// ignore_for_file: avoid_unnecessary_containers, file_names, duplicate_ignore, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:furry_friend/Controllers/notification-controller';
 import 'package:furry_friend/Screens/user-panel/all-categories-screen.dart';
 import 'package:furry_friend/Screens/user-panel/all-flash-sale-products.dart';
 import 'package:furry_friend/Screens/user-panel/all-products-screen.dart';
 import 'package:furry_friend/Screens/user-panel/cart-screen.dart';
+import 'package:furry_friend/Services/get-service-key.dart';
+import 'package:furry_friend/Services/notification-service.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:furry_friend/Widgets/all-products-widgets.dart';
 import 'package:furry_friend/Widgets/banner-widget.dart';
@@ -18,10 +21,30 @@ import 'package:furry_friend/Widgets/heading-widget.dart';
 import 'package:get/get.dart';
 
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  
   const MainScreen({super.key});
 
   @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+    NotificationService notificationService = NotificationService();
+  final GetServerKey _getServerKey = GetServerKey();
+
+  final NotificationController notificationController =
+      Get.put(NotificationController());
+
+  @override
+  void initState() {
+    super.initState();
+    notificationService.requestNotificationPermission();
+    notificationService.getDeviceToken();
+    notificationService.firebaseInit(context);
+    notificationService.setupInteractMessage(context);
+    // getServiceToken();
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:furry_friend/Controllers/sign-up-controller.dart';
 import 'package:furry_friend/Screens/auth-ui/sign-in-screen.dart';
+import 'package:furry_friend/Services/notification-service.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:get/get.dart';
 
@@ -223,13 +224,16 @@ class _SignInScreenState extends State<SignUpScreen> {
                         style: TextStyle(color: AppConstant.appTextColor),
                       ),
                       onPressed: () async {
+                        NotificationService notificationService =
+                            NotificationService();
                         
                         String name = username.text.trim();
                         String email = userEmail.text.trim();
                         String phone = userPhone.text.trim();
                         String password = userPassword.text.trim();
-                        String userDeviceToken = '';
-
+                        String? userDeviceToken =
+                            await notificationService.getDeviceToken();
+                            
                         if (name.isEmpty ||
                             email.isEmpty ||
                             phone.isEmpty ||

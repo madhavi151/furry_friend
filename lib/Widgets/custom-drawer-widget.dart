@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:furry_friend/Screens/user-panel/all-orders-screen.dart';
 import 'package:furry_friend/Utils/app-constant.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -86,6 +87,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     }),
                     _buildDrawerItem("Orders", Icons.shopping_bag, () {
                       Get.back();
+                      Get.to(() => AllOrderScreen());
+                      
                     }),
                     _buildDrawerItem("Contact", Icons.contact_support, () {
                       Get.back();
